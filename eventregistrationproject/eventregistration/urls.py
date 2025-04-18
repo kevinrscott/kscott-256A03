@@ -16,8 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from events import views as eventViews
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('', eventViews.events, name='events'),
+    path('event/create/', eventViews.manage_event, name='create_event'),
+    path('event/update/<int:event_id>/', eventViews.manage_event, name='update_event'),
+    path('event/delete/<int:event_id>/', eventViews.delete_event, name='delete_event'),
+    path('event/register/<int:event_id>/', eventViews.register_event, name='register_event'),
+    path('event/unregister/<int:event_id>/', eventViews.unregister_event, name='unregister_event'),
 ]

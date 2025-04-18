@@ -9,12 +9,10 @@
             {% csrf_token %}
             {{ form.as_p }}
         
-            {% if form.non_field_errors %}
-                <div class="error">
-                    {% for error in form.non_field_errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
+            {% if error %}
+            <div>
+                {{ error }}
+            </div>
             {% endif %}
         
             <button type="submit">Login</button>

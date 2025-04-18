@@ -13,7 +13,7 @@ class Events(models.Model):
 
 class Registrations(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    events = models.ManyToManyField(Events, related_name='registrants')
+    event = models.ForeignKey(Events, on_delete=models.CASCADE, related_name='registrations')
 
     def __str__(self):
-        return f"{self.user.username} registered for events"
+        return f"{self.user.username} registered for {self.event.name}"

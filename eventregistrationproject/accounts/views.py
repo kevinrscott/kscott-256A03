@@ -10,19 +10,18 @@ import re
 
 def logoutaccount(request):
     logout(request)
-    return redirect('home')
+    return redirect('loginaccount')
     
 def loginaccount(request):
     if request.method == "GET":
         return render(request, 'loginaccount.html', {'form': AuthenticateForm()})
     else:
-        form = AuthenticateForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'loginaccount.html', {'form': AuthenticateForm(), 'error': 'Invalid Login'})
         else:
-            return render(request, 'loginaccount.html', {'form': form})
+            login(request, user)
+            return redirect('events')
         
 def signupaccount(request):
     if request.method == "GET":

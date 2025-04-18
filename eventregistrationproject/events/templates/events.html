@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Events{% endblock title %}
+
+{% block content %}
+    <div>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if is_admin %}
+            <a href="{% url 'create_event' %}">Create Event</a>
+
+            <h1>Upcoming Events</h1>
+            {% if upcoming_events %}
+                <ul>
+                    {% for event in upcoming_events %}
+                        <li>
+                            <strong>{{ event.name }}</strong> - {{ event.start_date }} to {{ event.end_date }}
+                            <a href="{% url 'update_event' event.id %}">Update</a>
+                            <a href="{% url 'delete_event' event.id %}">Delete</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No upcoming events available.</p>
+            {% endif %}
+
+            <h1>All Events</h1>
+            {% if events %}
+                <ul>
+                    {% for event in events %}
+                        <li>
+                            <strong>{{ event.name }}</strong> - {{ event.start_date }} to {{ event.end_date }}
+                            <a href="{% url 'update_event' event.id %}">Update</a>
+                            <a href="{% url 'delete_event' event.id %}">Delete</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No events available.</p>
+            {% endif %}
+            
+        {% elif not is_admin %}
+            <h1>Upcoming Events</h1>
+            {% if upcoming_events %}
+                <ul>
+                    {% for event in upcoming_events %}
+                        <li>
+                            <strong>{{ event.name }}</strong> - {{ event.start_date }} to {{ event.end_date }}
+                            {% if event.id in registered_ids %}
+                                <form method="post" action="{% url 'unregister_event' event.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Unregister</button>
+                                </form>
+                            {% else %}
+                                <form method="post" action="{% url 'register_event' event.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Register</button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No upcoming events available.</p>
+            {% endif %}
+
+            <h1>Registered Events</h1>
+            {% if registered_events %}
+                <ul>
+                    {% for event in registered_events %}
+                        <li>
+                            <strong>{{ event.event.name }}</strong> - {{ event.event.start_date }} to {{ event.event.end_date }}
+                            <form method="post" action="{% url 'unregister_event' event.event.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Unregister</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You are not registered for any events.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock content %}

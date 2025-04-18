@@ -6,6 +6,15 @@
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
+    <nav>
+        {% if user.is_authenticated %}
+            <a href={% url 'events' %}>Events</a>
+            <a href={% url 'logoutaccount' %}>Logout</a>
+        {% else %}
+            <a href="{% url 'loginaccount' %}">Login</a>
+            <a href="{% url 'signupaccount' %}">Sign Up</a>
+        {% endif %}
+        </nav>
     {% block content %}{% endblock content %}
 </body>
 </html>
