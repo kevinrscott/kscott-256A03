@@ -2,24 +2,31 @@
 {% block title %}Login{% endblock title %}
 
 {% block content %}
-<div>
-    <h2>Login</h2>
-    <p>
-        <form method="post">
+<div class="flex justify-center items-center min-h-[calc(100vh-150px)]">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="bg-blue-950 text-white text-center text-xl font-semibold rounded-t-lg py-4">
+            Login
+        </h2>
+
+        <form method="post" class="px-8 py-6 space-y-4">
             {% csrf_token %}
+
             {{ form.as_p }}
-        
+
             {% if error %}
-            <div>
-                {{ error }}
-            </div>
+                <div class="bg-red-200 m-1 border border-solid border-red-900 p-3 text-center">
+                    {{ error }}
+                </div>
             {% endif %}
-        
-            <button type="submit">Login</button>
+
+            <button type="submit" class="w-full bg-blue-950 text-white py-2 rounded hover:bg-blue-900 transition">
+                Login
+            </button>
         </form>
-        <span>
-            Don't have an account? <a href="{% url 'signupaccount' %}">Sign Up</a>
-        </span>
-    </p>
+
+        <div class="bg-blue-950 text-white text-center rounded-b-lg py-3 text-sm">
+            Don’t have an account? <a href="{% url 'signupaccount' %}" class="underline hover:text-gray-300">Sign Up</a>
+        </div>
+    </div>
 </div>
 {% endblock content %}

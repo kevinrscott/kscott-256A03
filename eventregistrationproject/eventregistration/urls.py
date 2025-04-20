@@ -22,6 +22,7 @@ from events import views as eventViews
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('reports/', include('reports.urls')),
     path('', eventViews.events, name='events'),
     path('event/create/', eventViews.manage_event, name='create_event'),
     path('event/update/<int:event_id>/', eventViews.manage_event, name='update_event'),

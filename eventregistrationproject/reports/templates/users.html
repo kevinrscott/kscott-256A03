@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Users{% endblock title %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 space-y-6">
+    {% for user in users %}
+        <div class="border border-gray-300 rounded-lg shadow-md bg-white p-6">
+            <h2 class="text-xl font-semibold text-blue-950">{{ user.full_name }}</h2>
+            <p class="text-gray-700"><strong>Username:</strong> {{ user.username }}</p>
+            <p class="text-gray-700"><strong>Role:</strong> {{ user.role }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

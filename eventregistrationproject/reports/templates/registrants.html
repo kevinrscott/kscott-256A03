@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrants{% endblock title %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto my-10 space-y-8">
+    {% for event in events %}
+        <div class="border border-gray-300 rounded-lg shadow-md bg-white">
+            <div class="bg-blue-950 text-white px-6 py-4 rounded-t-lg">
+                <h2 class="text-lg font-semibold">{{ event.event.name }}</h2>
+            </div>
+            <div class="p-6">
+                {% if event.registrants %}
+                    <ul class="list-disc">
+                        {% for registrant in event.registrants %}
+                            <li class="text-gray-800">{{ registrant.user.username }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-600">No registrants for this event.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

@@ -3,89 +3,132 @@
 {% block title %}Events{% endblock title %}
 
 {% block content %}
-    <div>
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+<div class="p-6 max-w-7xl mx-auto">
+    {% if messages %}
+        <ul class="mb-4">
+            {% for message in messages %}
+                <li class="p-2 mb-2 text-white rounded 
+                {% if message.tags == 'success' %}bg-green-600{% elif message.tags == 'error' %}bg-red-600{% endif %}">
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-        {% if is_admin %}
-            <a href="{% url 'create_event' %}">Create Event</a>
+    <div class="flex flex-row items-center justify-between mt-6">
+        <form class="flex flex-row items-center gap-4">
+        <input type="text" id="searchEvent" name="searchEvent" placeholder="Search for Event..."
+             class="w-auto px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-950" />
+        <button type="submit" class="bg-blue-950 text-white px-4 py-2 rounded hover:bg-blue-900 transition">Search</button>
+    </form>
 
-            <h1>Upcoming Events</h1>
-            {% if upcoming_events %}
-                <ul>
-                    {% for event in upcoming_events %}
-                        <li>
-                            <strong>{{ event.name }}</strong> - {{ event.start_date }} to {{ event.end_date }}
-                            <a href="{% url 'update_event' event.id %}">Update</a>
-                            <a href="{% url 'delete_event' event.id %}">Delete</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No upcoming events available.</p>
-            {% endif %}
-
-            <h1>All Events</h1>
-            {% if events %}
-                <ul>
-                    {% for event in events %}
-                        <li>
-                            <strong>{{ event.name }}</strong> - {{ event.start_date }} to {{ event.end_date }}
-                            <a href="{% url 'update_event' event.id %}">Update</a>
-                            <a href="{% url 'delete_event' event.id %}">Delete</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No events available.</p>
-            {% endif %}
-            
-        {% elif not is_admin %}
-            <h1>Upcoming Events</h1>
-            {% if upcoming_events %}
-                <ul>
-                    {% for event in upcoming_events %}
-                        <li>
-                            <strong>{{ event.name }}</strong> - {{ event.start_date }} to {{ event.end_date }}
-                            {% if event.id in registered_ids %}
-                                <form method="post" action="{% url 'unregister_event' event.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit">Unregister</button>
-                                </form>
-                            {% else %}
-                                <form method="post" action="{% url 'register_event' event.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit">Register</button>
-                                </form>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No upcoming events available.</p>
-            {% endif %}
-
-            <h1>Registered Events</h1>
-            {% if registered_events %}
-                <ul>
-                    {% for event in registered_events %}
-                        <li>
-                            <strong>{{ event.event.name }}</strong> - {{ event.event.start_date }} to {{ event.event.end_date }}
-                            <form method="post" action="{% url 'unregister_event' event.event.id %}">
-                                {% csrf_token %}
-                                <button type="submit">Unregister</button>
-                            </form>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>You are not registered for any events.</p>
-            {% endif %}
-        {% endif %}
+    {% if is_admin %}
+        <a href="{% url 'create_event' %}" class="h-auto bg-blue-950 text-white px-4 py-2 rounded hover:bg-blue-900 transition">
+            + Create Event
+        </a>
+    {% endif %}
     </div>
+
+    {% if is_admin %}
+        <div class="grid grid-cols-2 gap-8 mt-6">
+            <div>
+                <h2 class="text-white bg-blue-950 rounded-t p-3 text-lg font-semibold">
+                    {% if search_term %}Searched Events{% else %}Upcoming Events{% endif %}
+                </h2>
+                <div class="border border-blue-950 rounded-b p-4 bg-white">
+                    {% if upcoming_events %}
+                        <ul class="space-y-4">
+                            {% for event in upcoming_events %}
+                                <li class="border p-4 rounded shadow">
+                                    <strong>{{ event.name }}</strong><br>
+                                    {{ event.start_date }} to {{ event.end_date }}<br>
+                                    <a class="text-blue-600 hover:underline" href="{% url 'update_event' event.id %}">Update</a> |
+                                    <a class="text-red-600 hover:underline" href="{% url 'delete_event' event.id %}">Delete</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>{% if search_term %}No events matched your search.{% else %}No upcoming events available.{% endif %}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-white bg-blue-950 rounded-t p-3 text-lg font-semibold">All Events</h2>
+                <div class="border border-blue-950 rounded-b p-4 bg-white">
+                    {% if events %}
+                        <ul class="space-y-4">
+                            {% for event in events %}
+                                <li class="border p-4 rounded shadow">
+                                    <strong>{{ event.name }}</strong><br>
+                                    {{ event.start_date }} to {{ event.end_date }}<br>
+                                    <a class="text-blue-600 hover:underline" href="{% url 'update_event' event.id %}">Update</a> |
+                                    <a class="text-red-600 hover:underline" href="{% url 'delete_event' event.id %}">Delete</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No events available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="grid grid-cols-2 gap-8 mt-6">
+            <div>
+                <h2 class="text-white bg-blue-950 rounded-t p-3 text-lg font-semibold">
+                    {% if search_term %}Searched Events{% else %}Upcoming Events{% endif %}
+                </h2>
+                <div class="border border-blue-950 rounded-b p-4 bg-white">
+                    {% if upcoming_events %}
+                        <ul class="space-y-4">
+                            {% for event in upcoming_events %}
+                                <li class="border p-4 rounded shadow">
+                                    <strong>{{ event.name }}</strong><br>
+                                    {{ event.start_date }} to {{ event.end_date }}
+                                    {% if event.id in registered_ids %}
+                                        <a href="{% url 'unregister_event' event.id %}" class="text-red-600 hover:underline block mt-2">Unregister</a>
+                                    {% else %}
+                                        {% if event.start_date < now %}
+                                            <p class="text-gray-600 mt-2">Registrations have ended</p>
+                                        {% else %}
+                                            <form method="post" action="{% url 'register_event' event.id %}" class="mt-2">
+                                                {% csrf_token %}
+                                                <button type="submit" class="text-blue-600 rounded hover:underline transition">
+                                                    Register
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>{% if search_term %}No events matched your search.{% else %}No upcoming events available.{% endif %}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-white bg-blue-950 rounded-t p-3 text-lg font-semibold">Registered Events</h2>
+                <div class="border border-blue-950 rounded-b p-4 bg-white">
+                    {% if registered_events %}
+                        <ul class="space-y-4">
+                            {% for event in registered_events %}
+                                <li class="border p-4 rounded shadow">
+                                    <strong>{{ event.event.name }}</strong><br>
+                                    {{ event.event.start_date }} to {{ event.event.end_date }}<br>
+                                    <a href="{% url 'unregister_event' event.id %}" class="text-red-600 hover:underline mt-2 inline-block">Unregister</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>You are not registered for any events.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
 {% endblock content %}

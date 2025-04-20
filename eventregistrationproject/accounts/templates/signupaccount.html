@@ -2,23 +2,29 @@
 {% block title %}Signup{% endblock title %}
 
 {% block content %}
-<div>
-    <h2>Sign Up</h2>
-    <p>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-          
-            <button type="submit">Sign Up</button>
-          </form>
-        {% if error %}
-            <div>
-                {{ error }}
+<div class="flex justify-center items-center min-h-[calc(100vh-150px)]">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md my-10">
+        <h2 class="bg-blue-950 text-white text-center text-xl font-semibold rounded-t-lg py-4">
+            Sign Up
+        </h2>
+            <form method="post" class="px-8 py-6 space-y-4">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                {% if error %}
+                <div class="bg-red-200 m-1 border border-solid border-red-900 p-3 text-center">
+                    {{ error }}
+                </div>
+                {% endif %}  
+            
+                <button type="submit" class="w-full bg-blue-950 text-white py-2 rounded hover:bg-blue-900 transition">
+                    Sign Up
+                </button>
+            </form>
+            
+            <div class="bg-blue-950 text-white text-center rounded-b-lg py-3 text-sm">
+                Already Have an Account? <a href="{% url 'loginaccount' %}" class="underline hover:text-gray-300">Login</a>
             </div>
-        {% endif %}  
-        <span>
-            Already Have an Account? <a href="{% url 'loginaccount' %}">Login</a>
-        </span>
-    </p>
+    </div>
 </div>
 {% endblock content %}
