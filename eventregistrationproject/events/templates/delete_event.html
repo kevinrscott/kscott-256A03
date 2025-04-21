@@ -8,13 +8,13 @@
         Are you sure you want to {% if is_admin %}delete the{% else %}unregister from the{% endif %} event:
     </h1>
 
-    <div class="mb-6 p-4 border-l-4 border-blue-950 bg-gray-50 rounded">
+    <div class="mb-6 p-4 border-l-4 border-blue-950 bg-gray-100 rounded">
         <p class="text-xl font-bold text-blue-950">{{ event.name }}</p>
         <p><strong class="text-gray-700">Start Date:</strong> {{ event.start_date }}</p>
         <p><strong class="text-gray-700">End Date:</strong> {{ event.end_date }}</p>
     </div>
 
-    <form method="POST" class="flex flex-col sm:flex-row gap-4">
+    <form method="POST" class="flex flex-row gap-4">
         {% csrf_token %}
         <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded transition">
             Yes, {% if is_admin %}delete{% else %}unregister from{% endif %} this event
